@@ -5,6 +5,7 @@ import Data.List
 import Data.Maybe
 import System.Exit
 import Text.Read
+import System.Directory
 import Options.Applicative
 import Data.Semigroup ((<>))
 
@@ -16,36 +17,6 @@ import OneMoreTry
 import CmdArgs
 --import ArgModule
 
-greet :: Sample -> IO ()
-greet (Sample c l p) = print c >> print l >> putStrLn p 
-greet _ = return ()
-
---data Sample = Sample
---  {colors :: Int
---   ,limit :: Float
---   ,path :: String
---  }
-
-{--sample :: Parser Sample
-sample = Sample 
- <$> option auto
-      (short 'n'
-      <> metavar "N"
-      <> help "number of colors in the final image"
-      )
- <*> option auto
-      (short 'l'
-      <> metavar "L"
-      <> help "convergence limit"
-      )
- <*> strOption
-      (
-          short 'f' 
-          <> metavar "F"
-          <> help "path to the file containing the colors of the pixels"
-      )--}  
-
-    
 goAway :: String -> Int -> IO ()
 goAway x 84 = do
     putStrLn x
@@ -53,43 +24,26 @@ goAway x 84 = do
 goAway x 0 = do
     exitWith(ExitSuccess)
            
+usage :: IO ()
+usage = putStrLn "USAGE: ./imageCompressor -n N -l L -f F\n" >>
+        putStrLn "\tN\tnumber of colors in the final image" >>
+        putStrLn "\tL\tconvergence limit" >>
+        putStrLn "\tF\tpath to the file containing the colors of the pixels" >>
+        goAway "" 0
 
-{--checkArgs :: Maybe Sample -> IO()
-checkArgs Nothing = goAway "bad!" 84
-checkSArgs _ = goAway "" 0--}
 
-{--comfort :: ParserResult Sample -> [String] -> IO ()
-comfort a (x:xs) | x == "-h" = do
-                     handleParseResult a ; print "help"
-                 | otherwise = checkArgs $ getParseResult a      
-                 --}
-
-simple :: Maybe Sample -> IO()
-simple Nothing = goAway "Bad!" 84
-simple _ =  goAway "HAHAHA!" 0 
-
+simple :: Maybe Sample -> [String] -> IO ()
+simple Nothing ("-h":_) = usage
+simple Nothing ("--help": _) = usage
+simple Nothing (_:_)  =  goAway "Bad!" 84
+simple (Just sam) (_:_) = do
+     ex <- doesFileExist (path sam)
+     if ex == True
+         then print $ imageCompressor (Sample {colors = (colors sam), 
+         limit = (limit sam), path = (path sam)})
+     else goAway "Bad path" 84
 
 main :: IO ()
 main = do
     argv <- getArgs
-    simple $ myParseArgs argv
-    --checkArgs $ myPasreArgs argv
-
-            
-
-
-    
-    {--comfort (execParserPure p opts argv) argv
-        where
-            opts = info (sample <**> helper) ( fullDesc
-                <> progDesc "Print a greeting for TARGET"
-                <> header "hello - a test for optparse-applicative" )
-            p = prefs showHelpOnError--}
-
-    
-            
-        
-
-
-
-    --p = prefs showHelpOnEmpty
+    simple (myParseArgs argv) argv

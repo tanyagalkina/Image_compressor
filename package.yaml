@@ -25,6 +25,7 @@ dependencies:
 - random 
 - optparse-applicative 
 - containers
+- directory
 
 library:
   source-dirs: src

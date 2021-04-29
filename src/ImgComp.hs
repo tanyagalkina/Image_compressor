@@ -2,5 +2,7 @@ module ImgComp
     ( imageCompressor
     ) where
 
-imageCompressor :: IO ()
-imageCompressor = putStrLn "I am compressing the image"
+import CmdArgs
+
+imageCompressor :: Sample -> String
+imageCompressor _ = "I am compressing the image"

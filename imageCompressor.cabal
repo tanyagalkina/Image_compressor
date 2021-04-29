@@ -4,16 +4,16 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 86768e5552bc4e4745655796109c1560f471a8ab45bf4ea26db356c4e0e3cce1
+-- hash: 0ffba7bfdb269232b32c3ba0de0dc43499fd7a5ba4a1e37d504b0f48a4e6dc5d
 
 name:           imageCompressor
 version:        0.1.0.0
 description:    Please see the README on GitHub at <https://github.com/githubuser/imageCompressor#readme>
 homepage:       https://github.com/githubuser/imageCompressor#readme
 bug-reports:    https://github.com/githubuser/imageCompressor/issues
-author:         Author name here
+author:         tanya galkina
 maintainer:     example@example.com
-copyright:      2021 Author name here
+copyright:      2021 galkina
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
@@ -27,13 +27,22 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      ArgModule
+      CmdArgs
+      ImgComp
+      OneMoreTry
+      PrintColors
+      ReadPic
   other-modules:
       Paths_imageCompressor
   hs-source-dirs:
       src
   build-depends:
       base >=4.7 && <5
+    , containers
+    , optparse-applicative
+    , parallel
+    , random
   default-language: Haskell2010
 
 executable imageCompressor-exe
@@ -45,7 +54,11 @@ executable imageCompressor-exe
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , containers
     , imageCompressor
+    , optparse-applicative
+    , parallel
+    , random
   default-language: Haskell2010
 
 test-suite imageCompressor-test
@@ -58,5 +71,9 @@ test-suite imageCompressor-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , containers
     , imageCompressor
+    , optparse-applicative
+    , parallel
+    , random
   default-language: Haskell2010

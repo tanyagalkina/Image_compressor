@@ -32,11 +32,12 @@ sample = Sample
 
 checkArgs :: Maybe Sample -> Maybe Sample
 checkArgs Nothing = Nothing
-checkArgs (Just sam) | colors sam < 1  = Nothing
-                     | limit sam < 0 = Nothing
-                     | limit sam > 1 = Nothing
-                     | path sam == "" = Nothing
-                     | otherwise = (Just sam)
+checkArgs (Just sam) 
+          | colors sam < 1  = Nothing
+          | limit sam < 0 = Nothing
+          | limit sam > 1 = Nothing
+          | path sam == "" = Nothing
+          | otherwise = (Just sam)
 
 myParseArgs :: [String] -> Maybe Sample
 myParseArgs argv = checkArgs $ getParseResult (execParserPure p opts argv)

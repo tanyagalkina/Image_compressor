@@ -1,6 +1,6 @@
 module PrintColors
-    ( printCluster
+    ( printColors
     ) where
 
-printCluster :: IO ()
-printCluster = putStrLn "I am print Cluster"
+printColors :: [String] -> IO ()
+printColors cont = putStrLn $ head cont

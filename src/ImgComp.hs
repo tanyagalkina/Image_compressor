@@ -3,6 +3,7 @@ module ImgComp
     ) where
 
 import CmdArgs
+--(colors sam, limit sam, getImage f) []
+imageCompressor :: (Int, Float, [String]) -> [String] -> [String]
+imageCompressor (c, l, cont) [] = cont  
 
-imageCompressor :: Sample -> String
-imageCompressor _ = "I am compressing the image"

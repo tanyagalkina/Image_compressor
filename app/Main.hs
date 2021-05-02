@@ -8,7 +8,6 @@ import Text.Read
 import Data.String
 import Data.Either
 import Control.Exception
-import System.Directory
 import Options.Applicative
 import Data.Semigroup ((<>))
 

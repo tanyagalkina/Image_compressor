@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 3cd278e6fa478cd269e3df48193663401788723d229d35a63852487f5adacfd0
+-- hash: 0ffba7bfdb269232b32c3ba0de0dc43499fd7a5ba4a1e37d504b0f48a4e6dc5d
 
 name:           imageCompressor
 version:        0.1.0.0
@@ -40,7 +40,6 @@ library
   build-depends:
       base >=4.7 && <5
     , containers
-    , directory
     , optparse-applicative
     , parallel
     , random
@@ -56,7 +55,6 @@ executable imageCompressor-exe
   build-depends:
       base >=4.7 && <5
     , containers
-    , directory
     , imageCompressor
     , optparse-applicative
     , parallel
@@ -74,7 +72,6 @@ test-suite imageCompressor-test
   build-depends:
       base >=4.7 && <5
     , containers
-    , directory
     , imageCompressor
     , optparse-applicative
     , parallel

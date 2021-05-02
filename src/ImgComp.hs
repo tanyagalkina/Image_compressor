@@ -5,5 +5,5 @@ module ImgComp
 import CmdArgs
 --(colors sam, limit sam, getImage f) []
 imageCompressor :: (Int, Float, [String]) -> [String] -> [String]
-imageCompressor (c, l, cont) [] = cont  
+imageCompressor (c, l, [[], []]) [] = [[],[]]  
 

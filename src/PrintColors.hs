@@ -2,8 +2,9 @@ module PrintColors
     ( printColors
     ) where
 
-import System.Exit        
+import System.Exit 
+import ReadPic       
 
-printColors :: [String] -> IO ()
-printColors [[], []] =  putStrLn "The file was empty" >> exitWith (ExitFailure 84)
-printColors cont = putStrLn $ head cont
+printColors :: [Pixel] -> IO ()
+printColors [] =  putStrLn "There was something wrong in the file" >> exitWith (ExitFailure 84)
+printColors cont = print (x (last cont)) >> print (x (head cont))

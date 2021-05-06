@@ -25,7 +25,7 @@ data Pixel = Pixel
 
 readPixels :: String -> [Pixel]
 readPixels [] = []
-readPixels f = getMaybe (map parseLine (removeEmptyLine(lines f)))
+readPixels f = getMaybe (map parseLine (filter (not . null)(lines f)))
 
 getMaybe :: [Maybe a] -> [a] 
 getMaybe lst = case haveNothing of
@@ -34,20 +34,22 @@ getMaybe lst = case haveNothing of
   where
     haveNothing = any isNothing lst
 
-removeEmptyLine :: [String] -> [String]
-removeEmptyLine arr
-        | hasEmptyLine arr  = delete "" arr
-        | otherwise             = arr
-
-hasEmptyLine :: [String] -> Bool
-hasEmptyLine []     = False
-hasEmptyLine (x:xs)
-        | null x        = True
-        | otherwise     = hasEmptyLine xs
-
 parseLine :: String -> Maybe Pixel
-parseLine ln = buildPixel $ concat [(takeLoc (words ln !! 0)), 
-    (takeClr (words ln !! 1))]
+parseLine ln = buildPixel $ getValueList (words (map putSpace ln))
+--parseLine ln = buildPixel $ concat [(takeLoc (words ln !! 0)), 
+--    (takeClr (words ln !! 1))]
+
+getValueList :: [String] -> [Maybe Int]
+getValueList wds  = (++) pnt cl
+            where   pnt = takeLoc [head wds, (wds !! 1)]
+                    cl = takeClr [(wds !! 2), (wds !! 3), last wds]     
+
+--getValueList :: [String] -> [Maybe Int]
+--getValueList wds | length wds == 5 = (++) pnt clr
+--                       where   pnt = takeLoc [head wds, (wds !! 1)]
+--                               clr = takeClr [(wds !! 2), (wds !! 3), last wds]     
+--                 | otherwise = [Nothing, Nothing]      
+
 
 isValidPos :: Int -> Int -> Bool
 isValidPos x y | x < 0 || y < 0 = False
@@ -68,16 +70,16 @@ buildPixel = go . fromMaybe [] . sequenceA
           fromIntegral (ga), blu = fromIntegral (ba)}}
       go _ = Nothing
 
-takeLoc :: String -> [Maybe Int]
-takeLoc wd = readLoc (x, y)
-           where x = (words (map putSpace wd)) !! 0
-                 y = (words (map putSpace wd)) !! 1
+takeLoc :: [String] -> [Maybe Int]
+takeLoc wd = readLoc (head wd, last wd)
+          -- where x = (words (map putSpace wd)) !! 0
+          --       y = (words (map putSpace wd)) !! 1
 
-takeClr :: String -> [Maybe Int]
-takeClr wd = readClr (r, g, b)
-              where r = (words (map putSpace wd)) !! 0
-                    g = (words (map putSpace wd)) !! 1
-                    b = (words (map putSpace wd)) !! 2
+takeClr :: [String] -> [Maybe Int]
+takeClr wd = readClr (head wd, wd !! 1, last wd)
+              --where r = (words (map putSpace wd)) !! 0
+              --      g = (words (map putSpace wd)) !! 1
+              --      b = (words (map putSpace wd)) !! 2
 
 readClr :: ([Char], [Char], [Char]) -> [Maybe Int]
 readClr (r, g, b) = [(readMaybe r :: Maybe Int), 

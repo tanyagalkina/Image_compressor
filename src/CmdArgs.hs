@@ -1,33 +1,28 @@
 module CmdArgs
     (myParseArgs
-    ,Sample(..)
+    --,Sample(..)
     ) where
 
 import Options.Applicative
+import Types
 
-data Sample = Sample
-  {colors :: Int
-   ,limit :: Float
-   ,path :: String
-  }
+--data Sample = Sample
+--  {colors :: Int
+--   ,limit :: Float
+--   ,path :: String
+--  }
 
 sample :: Parser Sample
 sample = Sample 
  <$> option auto
       (short 'n'
-      <> metavar "N"
-      <> help "number of colors in the final image"
       )
  <*> option auto
       (short 'l'
-      <> metavar "L"
-      <> help "convergence limit"
       )
  <*> strOption
       (
-          short 'f' 
-          <> metavar "F"
-          <> help "path to the file containing the colors of the pixels"
+       short 'f' 
       )
 
 checkArgs :: Maybe Sample -> Maybe Sample

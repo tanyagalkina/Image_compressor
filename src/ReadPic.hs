@@ -4,11 +4,11 @@ module ReadPic
     ,Pixel(..)
     ) where
 
-import Data.List
 import Data.Maybe
 import Text.Read
+import Types
 
-data Color = Color
+{--data Color = Color
   { red :: Float
   , grn :: Float
   , blu :: Float
@@ -21,7 +21,7 @@ data Pixel = Pixel
      --,r :: Float
      --,g :: Float
      --,b :: Float
-    } deriving (Eq,Ord,Show)
+    } deriving (Eq,Ord,Show)--}
 
 readPixels :: String -> [Pixel]
 readPixels [] = []

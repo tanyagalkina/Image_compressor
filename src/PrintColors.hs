@@ -2,18 +2,17 @@ module PrintColors
     ( printColors
     ) where
 
-import System.Exit 
-import ImgComp
+import System.Exit
+import Types 
 import Text.Printf 
-import ReadPic    
 
 printPix :: [Pixel] -> IO ()
 printPix []      = return ()
-printPix (w:ws)  = do 
-            printf "(%d,%d) (%.f,%.f,%.f)\n" ((x w) :: Int) ((y w) :: Int) 
-                ((red (clr w)) :: Float) ((grn (clr w)) :: Float)
-                     ((blu (clr w)) :: Float)
-            printPix ws
+printPix (w:ws)  = 
+    printf "(%d,%d) (%.f,%.f,%.f)\n" ((x w) :: Int) ((y w) :: Int) 
+            ((red (clr w)) :: Float) ((grn (clr w)) :: Float)
+                    ((blu (clr w)) :: Float) >>
+    printPix ws
 
 prCluster :: Cluster -> IO ()
 prCluster c = 

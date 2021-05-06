@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0ffba7bfdb269232b32c3ba0de0dc43499fd7a5ba4a1e37d504b0f48a4e6dc5d
+-- hash: 8de1f58b19290533cd8df6fc76de80a2ff0e92958d6126a4f88173a963a172ad
 
 name:           imageCompressor
 version:        0.1.0.0
@@ -30,9 +30,10 @@ library
       ArgModule
       CmdArgs
       ImgComp
-      OneMoreTry
+      KMeans
       PrintColors
       ReadPic
+      Types
   other-modules:
       Paths_imageCompressor
   hs-source-dirs:

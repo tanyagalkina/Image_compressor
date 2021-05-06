@@ -16,6 +16,7 @@ import PrintColors
 import ImgComp
 import ReadPic
 import CmdArgs
+import Types
            
 usage :: IO ()
 usage = putStrLn "USAGE: ./imageCompressor -n N -l L -f F\n" >>
@@ -36,7 +37,7 @@ manager (Just sam) (_:_)  = do
         res <- try $ readFile (path sam) :: IO (Either IOException String)
         case res of
             Left except -> print except >> exitWith (ExitFailure 84)
-            Right f -> printColors $ imageCompressor 
+            Right f -> printColors $ imgComp 
                 (colors sam, limit sam, readPixels f) []
 
 main :: IO [()]

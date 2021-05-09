@@ -18,7 +18,9 @@ getMinDist (Color r g b:Color rr gg bb:xs) mind =
 getMinDist _ mind = mind
 
 calcDist :: Color -> Color -> Float
-calcDist a c = sqrt (r*r + g*g + b*b)
+calcDist a c | a == c = 0
+             | otherwise = 
+    sqrt (r*r + g*g + b*b)
     where
         r = red a - red c
         g = grn a - grn c

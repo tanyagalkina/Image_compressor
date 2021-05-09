@@ -17,6 +17,7 @@ import ImgComp
 import ReadPic
 import CmdArgs
 import Types
+import System.Random
            
 usage :: IO ()
 usage = putStrLn "USAGE: ./imageCompressor -n N -l L -f F\n" >>
@@ -34,11 +35,12 @@ manager Nothing ("--help": _) = usage >> exitWith (ExitSuccess)
 manager Nothing (_:_)  = putStrLn "There were bad arguments" >> usage 
     >> exitWith (ExitFailure 84)
 manager (Just sam) (_:_)  = do
+        myran <- randomRIO (0, colors sam)
         res <- try $ readFile (path sam) :: IO (Either IOException String)
         case res of
             Left except -> print except >> exitWith (ExitFailure 84)
-            Right f -> printColors $ imgComp 
-                (colors sam, limit sam, readPixels f) []
+            Right f -> printColors $ 
+                compManager (colors sam, limit sam, readPixels f) myran
 
 main :: IO [()]
 main = do

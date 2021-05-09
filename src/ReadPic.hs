@@ -8,21 +8,6 @@ import Data.Maybe
 import Text.Read
 import Types
 
-{--data Color = Color
-  { red :: Float
-  , grn :: Float
-  , blu :: Float
-  } deriving (Eq,Ord,Show)
-
-data Pixel = Pixel
-    { x :: Int
-     ,y :: Int 
-     ,clr:: Color
-     --,r :: Float
-     --,g :: Float
-     --,b :: Float
-    } deriving (Eq,Ord,Show)--}
-
 readPixels :: String -> [Pixel]
 readPixels [] = []
 readPixels f = getMaybe (map parseLine (filter (not . null)(lines f)))

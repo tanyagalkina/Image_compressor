@@ -1,16 +1,9 @@
 module CmdArgs
     (myParseArgs
-    --,Sample(..)
     ) where
 
 import Options.Applicative
 import Types
-
---data Sample = Sample
---  {colors :: Int
---   ,limit :: Float
---   ,path :: String
---  }
 
 sample :: Parser Sample
 sample = Sample 

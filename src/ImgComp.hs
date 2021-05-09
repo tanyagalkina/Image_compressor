@@ -1,61 +1,67 @@
 module ImgComp
     ( imgComp
+     ,compManager
     ) where
 
-import CmdArgs
 import ReadPic
 import KMeans
 import Types
+import Debug.Trace
 
-imgComp :: (Int, Float, [Pixel]) -> [Cluster] -> [Cluster]
-imgComp (c, l, []) [] = []
-imgComp (1, _, f) [] = [Cluster {mean = calcMean $ map clr f, pix = f}]  
-imgComp (c, l, f) [] = [Cluster {mean = Color 
-           9  4  3, pix = f}, 
-      Cluster {mean = Color 56 23 83, pix = f}]
+compManager ::(Int, Float, [Pixel]) -> Int -> [Cluster]
+--compManger (nb,l, pic) ran | trace ("manager " ++ show ran ++ " " ++ show nb) False = undefined
+compManager (_, _, []) _ = []
+compManager (1, _, pic) _ = 
+    [Cluster {mean = calcMean $ map clr pic, pix = pic}]
+compManager (nb,l, pic) ran = imgComp (len,lim, pic) set
+         where set = (randomCentroids (map clr pic) nb ran)
+               len = length set
+               lim = (getMinDist set 1000000) * l 
 
+constructRes :: [Color] -> [Cluster] -> [Cluster]-> [Cluster]
+constructRes [] place [] = place
+constructRes (r:rs) place (o:os) = constructRes rs 
+    (Cluster {mean = r, pix = (pix o)}:place) os
 
+imgComp :: (Int, Float,[Pixel]) -> [Color] -> [Cluster]
+imgComp (nb, lim, pic) cenPrev  
+              | checkMoves  cenPrev cenNext lim == False 
+                  = imgComp (nb, lim, pic) cenNext  
+              | otherwise = constructRes cenNext [] 
+                  (placeChunks (kConstructor cenPrev []) pic)
+  where cenNext = (kMeans $ placeChunks (kConstructor cenPrev []) pic)
 
-{--imgComp :: (Int, Float, [Pixel]) -> [Cluster] -> [Cluster]
-imgComp (c, l, []) [] = []
-imgComp (1, _, pic) [] = [Cluster {mean = calcMean $ map clr f, pix = f}]
-imgComp (2, _, pic) [] = 
-imgComp (c, l, pic) [] = imgComp (ca, l, pic) (kMeans pic ca [])
-                where -- this fit is needed only for the first time
-                ca = if c > len then len else c
-                len = length pic      
-imgComp (c, l, pic) last
-        | ifLimited last new l == False = imgComp (c, l, pic) new
-        | otherwise = new
-            where
-                new = kMeans pic c last
+checkMoves :: [Color] -> [Color] -> Float -> Bool
+--checkMoves (x:xs) (y:ys) lim |
+checkMoves [] [] lim = True
+-- trace ("checkMoves  " ++ show lim ++ " " ++ show c) False = undefined
+checkMoves (x:xs) (y:ys) lim | calcDist x y < lim = checkMoves xs ys lim
+                             | otherwise = False
 
-ifLimited :: [Cluster] -> [Cluster] -> Float -> Bool
-ifLimited old new e
-        | length x == length old    = True
-        | otherwise                 = False
-            where
-                x = [function i | i <- take (length old) [0,1..] , function i == True]
-                function i = eqCluster (cluster (old !! i)) (cluster (new !! i)) e
+replaceNth :: Int -> Cluster -> [Cluster] -> [Cluster]
+replaceNth _ _ [] = []
+replaceNth n newVal (x:xs)
+      | n == 0 = newVal:xs
+      | otherwise = x:replaceNth (n-1) newVal xs
 
+constrNewCluster :: Pixel -> Cluster -> Cluster
+constrNewCluster p clus = Cluster {mean = (mean clus), pix = p:(pix clus) }
 
-eqCluster :: Cluster -> Cluster -> Float -> Bool
-eqCluster clusterA clusterB e
-        | x > e     = False
-        | otherwise = True
-            where
-                a = pos clusterA
-                b = pos clusterB
-                x = distanceF a b
+placeChunks :: [Cluster] -> [Pixel] -> [Cluster]
+--placeChunks build (p:ps) | trace ("place Chunks " ++ show (map mean build) ++ " " ) False = undefined
+placeChunks build [] = build
+placeChunks build (p:ps) = placeChunks (replaceNth ind newVal build) ps
+                  where newVal = constrNewCluster p (build !! ind)
+                        ind =  getChunkInd (clr p) build  1000000 0 0 
 
-newCluster :: [Pixel] -> Int -> [Cluster]
-newCluster img n = [mean (y !! i) | i <- take n [0,1..]]
-    where
-        y = chunks (length img `div` n) img
-        
+getChunkInd :: Color -> [Cluster] -> Float -> Int -> Int -> Int
+getChunkInd _ [] _ _ minIdx = minIdx
+getChunkInd line (cur : rest) curMin curIdx minIdx  | calcDist line 
+    (mean cur) < curMin = getChunkInd line rest 
+                     (calcDist line (mean cur)) (curIdx + 1) curIdx
+    | otherwise = getChunkInd line rest curMin (curIdx + 1) minIdx    
 
-chunks :: Int -> [a] -> [[a]]
-chunks _ [] = []
-chunks n xs =
-    let (ys, zs) = splitAt n xs
-    in  ys : chunks n zs--}
+kConstructor :: [Color] -> [Cluster] -> [Cluster]
+kConstructor [] curr = reverse curr
+kConstructor (c:cs) curr = 
+    (kConstructor cs (Cluster {mean = c, pix = []}:curr))

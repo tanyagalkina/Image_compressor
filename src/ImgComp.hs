@@ -9,7 +9,6 @@ import Types
 import Debug.Trace
 
 compManager ::(Int, Float, [Pixel]) -> Int -> [Cluster]
---compManger (nb,l, pic) ran | trace ("manager " ++ show ran ++ " " ++ show nb) False = undefined
 compManager (_, _, []) _ = []
 compManager (1, _, pic) _ = 
     [Cluster {mean = calcMean $ map clr pic, pix = pic}]
@@ -32,9 +31,7 @@ imgComp (nb, lim, pic) cenPrev
   where cenNext = (kMeans $ placeChunks (kConstructor cenPrev []) pic)
 
 checkMoves :: [Color] -> [Color] -> Float -> Bool
---checkMoves (x:xs) (y:ys) lim |
 checkMoves [] [] lim = True
--- trace ("checkMoves  " ++ show lim ++ " " ++ show c) False = undefined
 checkMoves (x:xs) (y:ys) lim | calcDist x y < lim = checkMoves xs ys lim
                              | otherwise = False
 
@@ -48,7 +45,6 @@ constrNewCluster :: Pixel -> Cluster -> Cluster
 constrNewCluster p clus = Cluster {mean = (mean clus), pix = p:(pix clus) }
 
 placeChunks :: [Cluster] -> [Pixel] -> [Cluster]
---placeChunks build (p:ps) | trace ("place Chunks " ++ show (map mean build) ++ " " ) False = undefined
 placeChunks build [] = build
 placeChunks build (p:ps) = placeChunks (replaceNth ind newVal build) ps
                   where newVal = constrNewCluster p (build !! ind)

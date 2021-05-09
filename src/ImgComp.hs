@@ -37,9 +37,9 @@ checkMoves (x:xs) (y:ys) lim | calcDist x y < lim = checkMoves xs ys lim
 
 replaceNth :: Int -> Cluster -> [Cluster] -> [Cluster]
 replaceNth _ _ [] = []
-replaceNth n newVal (x:xs)
-      | n == 0 = newVal:xs
-      | otherwise = x:replaceNth (n-1) newVal xs
+replaceNth 0 newVal (x:xs) = newVal:xs
+replaceNth n newVal (x:xs) = x:replaceNth (n-1) newVal xs
+
 
 constrNewCluster :: Pixel -> Cluster -> Cluster
 constrNewCluster p clus = Cluster {mean = (mean clus), pix = p:(pix clus) }

@@ -7,7 +7,7 @@
 
 ### Makefile
 ```sh
-$> git clone https://github.com/Harmos274/ImageCompressor
+$> git clone https://github.com/tanyagalkina/Image_compressor.git
 $> cd ImageCompressor
 $> make
 ```
@@ -40,13 +40,3 @@ $> head exampleInput
 ```
 The left column is the actual position of a pixel and the right column it's color.
 <br>
-
-## Tests (With Tasty and HUnit)
-
-```sh
-$> stack test
-```
-<br>
-
-## Note:
-I could rework the project for fun to allow `bmp` format. Not ***certainly***, but i could do it.

@@ -1,5 +1,5 @@
 # Image Compressor
-[K-mean algorithm](https://en.wikipedia.org/wiki/K-means_clustering) applied to image compression.
+[K-means algorithm](https://en.wikipedia.org/wiki/K-means_clustering) applied to image compression.
 <br>
 
 ## Build

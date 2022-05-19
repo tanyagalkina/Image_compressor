@@ -8,7 +8,7 @@
 ### Makefile
 ```sh
 $> git clone https://github.com/tanyagalkina/Image_compressor.git
-$> cd ImageCompressor
+$> cd Image_compressor
 $> make
 ```
 <br>
